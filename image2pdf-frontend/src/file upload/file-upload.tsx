@@ -32,31 +32,26 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setUploading(true);
     e.stopPropagation();
     if (dropAreaRef.current) {
       dropAreaRef.current.style.backgroundColor = "white";
     }
 
     const files = Array.from(e.dataTransfer.files);
-    setUploading(true);
     handleImageChange(files);
     previewImages(files);
-    // Simulating upload time with setTimeout (you can replace this with actual upload logic)
-    setTimeout(() => {
-      setUploading(false);
-    }, 1000);
+    setUploading(false);
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const files = Array.from(e.target.files);
       setUploading(true);
+      const files = Array.from(e.target.files);
       handleImageChange(files);
       previewImages(files);
       // Simulating upload time with setTimeout (you can replace this with actual upload logic)
-      setTimeout(() => {
-        setUploading(false);
-      }, 1000);
+      setUploading(false);
     }
   };
 
