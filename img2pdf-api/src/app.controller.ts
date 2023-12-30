@@ -3,19 +3,18 @@ import {
   Post,
   UploadedFiles,
   UseInterceptors,
-  NotFoundException
+  NotFoundException,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AppService } from './app.service';
 
-@Controller('image2pdf')
+@Controller('convert')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post('/convert')
-  @UseInterceptors(FilesInterceptor('images', 10)) // 10 is the max number of images
+  @Post('/image-to-pdf')
+  @UseInterceptors(FilesInterceptor('images', 20))
   async convertImageToPdf(@UploadedFiles() images: Express.Multer.File[]) {
-    
     // check if images are uploaded
     if (!images) {
       throw new NotFoundException('Images not found');

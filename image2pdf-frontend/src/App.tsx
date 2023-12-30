@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import Header from "./header/header";
 import FileUpload from "./file upload/file-upload";
 import Footer from "./footer/footer";
-import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 import Spinner from "react-bootstrap/Spinner";
 
 const ImageToPDFUploader: React.FC = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [pdfData, setPdfData] = useState<string | null>(null);
   const [processing, setprocessing] = useState(false);
+
+
+  const apiURL = process.env.REACT_APP_IMG2PDF_API;
 
   const handleImageChange = (files: File[]) => {
     setSelectedImages(files);
@@ -31,7 +32,7 @@ const ImageToPDFUploader: React.FC = () => {
 
     try {
       const response = await axios.post<{ pdf: string }>(
-        "https://image2pdf.onrender.com/image2pdf/convert",
+        `${apiURL}/convert/image-to-pdf`,
         formData,
         {
           headers: {
@@ -39,7 +40,6 @@ const ImageToPDFUploader: React.FC = () => {
           },
         }
       );
-      console.log("Response:", response.data);
 
       setPdfData(response.data.pdf);
     } catch (error) {
@@ -61,7 +61,7 @@ const ImageToPDFUploader: React.FC = () => {
           <div className="col-md-6">
             {processing ? (
               <div className="text-center">
-                <Spinner animation="border" role="status" >
+                <Spinner animation="border" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </Spinner>
               </div>
@@ -72,8 +72,7 @@ const ImageToPDFUploader: React.FC = () => {
                   <iframe
                     src={`data:application/pdf;base64,${pdfData}`}
                     width="100%"
-                    height="600px"
-                    title="PDF"
+                    height="500"
                   ></iframe>
                 </div>
                 <div className="mt-3 text-center">
